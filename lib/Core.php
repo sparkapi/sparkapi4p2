@@ -218,6 +218,10 @@ class flexmlsAPI_Core {
 	 */
 
 	function MakeAPICall($method, $service, $cache_time = 0, $params = array(), $post_data = null, $a_retry = false) {
+	
+		// reset last error code
+		$this->last_error_code = false;
+		$this->last_error_mess = false;
 
 		if ($this->transport == null) {
 			$this->SetTransport(new flexmlsAPI_CurlTransport);
@@ -652,6 +656,17 @@ class flexmlsAPI_Core {
 	function GetSystemInfo() {
 		return $this->return_first_result($this->MakeAPICall("GET", "system", '24h'));
 	}
+	
+	/*
+	 * Error services
+	 */
 
+	function GetErrors() {
+		if ($this->last_error_code || $this->last_error_mess){
+			return $this->last_error_code.' - '.$this->last_error_mess;
+		} else {
+			return false;
+		}
+	}	
 
 }
