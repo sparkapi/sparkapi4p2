@@ -534,7 +534,7 @@ class flexmlsAPI_Core {
 	 */
 
 	function AddMessage($data) {
-		$data = array('Messages' => $data);
+		$data = array('Messages' => array($data));
 		return $this->return_all_results($this->MakeAPICall("POST", "messages", 0, array(), $this->make_sendable_body($data)));
 	}
 
