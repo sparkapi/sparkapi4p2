@@ -237,7 +237,7 @@ class SparkAPI_Core {
 		);
 
 		// delegate to chosen authentication method for necessary changes to request
-		$this->sign_request(&$request);
+		$request = $this->sign_request($request);
 
 		$served_from_cache = false;
 

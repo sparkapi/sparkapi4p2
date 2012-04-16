@@ -73,6 +73,9 @@ class SparkAPI_APIAuth extends SparkAPI_Core implements SparkAPI_AuthInterface {
 
 		$request['query_string'] = http_build_query($http_parameters);
 		$request['cacheable_query_string'] = http_build_query($cache_http_parameters);
+
+		return $request;
+
 	}
 	
 	function SetAuthToken($token) {
