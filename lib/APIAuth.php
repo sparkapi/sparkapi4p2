@@ -1,6 +1,6 @@
 <?php
 
-class flexmlsAPI_APIAuth extends flexmlsAPI_Core implements flexmlsAPI_AuthInterface {
+class SparkAPI_APIAuth extends SparkAPI_Core implements SparkAPI_AuthInterface {
 	protected $api_key = null;
 	protected $api_secret = null;
 

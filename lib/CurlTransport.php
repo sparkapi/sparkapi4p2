@@ -1,6 +1,6 @@
 <?php
 
-class flexmlsAPI_CurlTransport extends flexmlsAPI_CoreTransport implements flexmlsAPI_TransportInterface {
+class SparkAPI_CurlTransport extends SparkAPI_CoreTransport implements SparkAPI_TransportInterface {
 	protected $ch = null;
 	
 	function __construct() {

@@ -1,6 +1,6 @@
 <?php
 
-// include the flexmlsAPI core which autoloads other classes as necessary
+// include the SparkAPI core which autoloads other classes as necessary
 require_once("lib/Core.php");
 
 
@@ -9,15 +9,15 @@ require_once("lib/Core.php");
  * Changed in version 2.0
  *
  * The newest version of the PHP API client (version 2.0) allows you to select which authentication method
- * you'd like to use against the API.  Version 1.0 was limited to the flexmls API authentication method and is
+ * you'd like to use against the API.  Version 1.0 was limited to the Spark API authentication method and is
  * now done using:
  *
- *      $api = new flexmlsAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
+ *      $api = new SparkAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
  *
- * With version 2.0, you can now authenticate using OAuth2 support.  For more details on OAuth2 with the flexmls API,
- * see https://www.flexmls.com/developers/api/api-services/authentication/
+ * With version 2.0, you can now authenticate using OAuth2 support.  For more details on OAuth2 with the Spark API,
+ * see http://sparkplatform.com/docs/authentication/oauth2_authentication
  *
- *      $api = new flexmlsAPI_OAuth($client_id, $client_secret, $application_uri);
+ *      $api = new SparkAPI_OAuth($client_id, $client_secret, $application_uri);
  *
  * To issue a Grant request with the "code" value provided by the API:
  *
@@ -45,7 +45,7 @@ require_once("lib/Core.php");
  *
  */
 
-$api = new flexmlsAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
+$api = new SparkAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
 
 // identify your application (optional)
 $api->SetApplicationName("PHP-API-Code-Examples/1.0");
@@ -72,9 +72,9 @@ $api->SetDeveloperMode(true);
  *
  * To enable Memcache or Memcached cache support, the host and port (both optional) can be given:
  *
- *      $api->SetCache( new flexmlsAPI_MemcacheCache() ); // defaults to localhost and port 11211
+ *      $api->SetCache( new SparkAPI_MemcacheCache() ); // defaults to localhost and port 11211
  *  or:
- *      $api->SetCache( new flexmlsAPI_MemcachedCache('remotehost', 12345) ); // overrides both defaults
+ *      $api->SetCache( new SparkAPI_MemcachedCache('remotehost', 12345) ); // overrides both defaults
  *
  * depending on the Memcached-compliant driver you choose.
  *
@@ -82,16 +82,16 @@ $api->SetDeveloperMode(true);
  * To enable WordPress caching, no arguments are required: this method uses the set_transient() and get_transient()
  * functions created by WordPress which can be extended by other WP plugins for additional (or modified) functionality.
  *
- *      $api->SetCache( new flexmlsAPI_WordPressCache() );
+ *      $api->SetCache( new SparkAPI_WordPressCache() );
  *
  *
  * To enable database caching via the MySQLi extension, you can either pass connection details to the class:
  *
- *      $api->SetCache( new flexmlsAPI_MySQLiCache($hostname, $database, $username, $password, $table_name));
+ *      $api->SetCache( new SparkAPI_MySQLiCache($hostname, $database, $username, $password, $table_name));
  *
  * or you can re-use an existing MySQLi connection by passing the object:
  *
- *      $api->SetCache( new flexmlsAPI_MySQLiCache($my_mysqli_object) );
+ *      $api->SetCache( new SparkAPI_MySQLiCache($my_mysqli_object) );
  *
  * By default, a $table_name of "api_cache" is assumed if none is given.  The structure for that table is:
  *
@@ -117,19 +117,19 @@ if ($result === false) {
  * request some basic account and system information
  */
 $result = $api->GetSystemInfo();
-// https://www.flexmls.com/developers/api/api-services/system-info/
+// http://sparkplatform.com/docs/api_services/system_info
 print_r($result);
 
 $result = $api->GetPropertyTypes();
-// https://www.flexmls.com/developers/api/api-services/property-types/
+// http://sparkplatform.com/docs/api_services/property_types
 print_r($result);
 
 $result = $api->GetStandardFields();
-// https://www.flexmls.com/developers/api/api-services/standard-fields/
+// http://sparkplatform.com/docs/api_services/standard_fields
 print_r($result);
 
 $result = $api->GetMyAccount();
-// https://www.flexmls.com/developers/api/api-services/my-account/
+// http://sparkplatform.com/docs/api_services/my_account
 print_r($result);
 
 
@@ -138,15 +138,15 @@ print_r($result);
  */
 
 $result = $api->GetMyListings();
-// https://www.flexmls.com/developers/api/api-services/listings/
+// http://sparkplatform.com/docs/api_services/listings
 print_r($result);
 
 $result = $api->GetOfficeListings();
-// https://www.flexmls.com/developers/api/api-services/listings/
+// http://sparkplatform.com/docs/api_services/listings
 print_r($result);
 
 $result = $api->GetCompanyListings();
-// https://www.flexmls.com/developers/api/api-services/listings/
+// http://sparkplatform.com/docs/api_services/listings
 print_r($result);
 
 /*
@@ -161,7 +161,7 @@ $result = $api->GetListings(
 		'_expand' => 'PrimaryPhoto'
 	)
 );
-// https://www.flexmls.com/developers/api/api-services/listings/
+// http://sparkplatform.com/docs/api_services/listings
 print_r($result);
 
 /*
@@ -171,15 +171,15 @@ print_r($result);
 $id = "20100912153422758914000000"; // this comes from the Id value in a listing response
 
 $result = $api->GetListingPhotos($id);
-// https://www.flexmls.com/developers/api/api-services/listing-photos/
+// http://sparkplatform.com/docs/api_services/listings/photos
 $result = $api->GetListingDocuments($id);
-// https://www.flexmls.com/developers/api/api-services/listing-documents/
+// http://sparkplatform.com/docs/api_services/listings/listing_documents
 $result = $api->GetListingOpenHouses($id);
-// https://www.flexmls.com/developers/api/api-services/open-houses/
+// http://sparkplatform.com/docs/api_services/listings/open_houses
 $result = $api->GetListingVideos($id);
-// https://www.flexmls.com/developers/api/api-services/listing-videos/
+// http://sparkplatform.com/docs/api_services/listings/videos
 $result = $api->GetListingVirtualTours($id);
-// https://www.flexmls.com/developers/api/api-services/virtual-tours/
+// http://sparkplatform.com/docs/api_services/listings/virtual_tours
 
 
 /*
@@ -189,19 +189,19 @@ $result = $api->GetListingVirtualTours($id);
 $photo_id = "20080917142739989238000000";
 
 $result = $api->GetListingPhoto($id, $photo_id);
-// https://www.flexmls.com/developers/api/api-services/listing-photos/
+// http://sparkplatform.com/docs/api_services/listings/photos
 
 
 /*
  * contact management
- * https://www.flexmls.com/developers/api/api-services/contacts/
+ * http://sparkplatform.com/docs/api_services/contacts
  */
 
 $result = $api->GetContacts();
 
 $new_contact = array(
 	"DisplayName" => "Example Contact",
-	"PrimaryEmail" => "apiexample@flexmls.com",
+	"PrimaryEmail" => "apiexample@sparkplatform.com",
 	"PrimaryPhoneNumber" => "888-123-4567",
 	"HomeStreetAddress" => "123 S. Main St",
 	"HomeLocality" => "Fargo",

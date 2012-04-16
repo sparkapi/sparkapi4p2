@@ -1,38 +1,38 @@
 <?php
 
 /**
- * A PHP wrapper for the flexmls REST API
+ * A PHP wrapper for the Spark REST API
  *
  * Version: 2.0
  *
- * Source URI: https://github.com/flexmls/flexmls_api4p2
+ * Source URI: https://github.com/sparkapi/sparkapi4p2
  * Author: (c) Financial Business Systems, Inc. 2011, 2012
- * Author URI: http://flexmls.com/developers
+ * Author URI: http://sparkplatform.com/docs
  *
- * This file is part of the flexmls PHP API client..
+ * This file is part of the Spark PHP API client..
 
- *     The flexmls PHP API client is free software: you can redistribute it and/or modify
+ *     The Spark PHP API client is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
 
- *     The flexmls PHP API client is distributed in the hope that it will be useful,
+ *     The Spark PHP API client is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
 
  *     You should have received a copy of the GNU General Public License
- *     along with the flexmls PHP API client.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with the Spark PHP API client.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
-spl_autoload_register(array('flexmlsAPI_Core', 'autoload'));
+spl_autoload_register(array('SparkAPI_Core', 'autoload'));
 
 
-class flexmlsAPI_Core {
+class SparkAPI_Core {
 	public $api_client_version = '2.0';
 
-	public $api_base = "api.flexmls.com";
+	public $api_base = "api.sparkapi.com";
 	public $api_version = "v1";
 
 	private $debug_mode = false;
@@ -40,7 +40,7 @@ class flexmlsAPI_Core {
 	protected $force_https = false;
 	protected $transport = null;
 	protected $cache = null;
-	protected $cache_prefix = "flexmlsAPI_";
+	protected $cache_prefix = "SparkAPI_";
 
 	protected $headers = array();
 
@@ -64,18 +64,18 @@ class flexmlsAPI_Core {
 
 	function __construct() {
 		$this->SetHeader("Content-Type", "application/json");
-		$this->SetHeader('User-Agent', 'flexmls API PHP Client/' . $this->api_client_version);
+		$this->SetHeader('User-Agent', 'Spark API PHP Client/' . $this->api_client_version);
 	}
 
 	static function autoload($class_name) {
-		if (preg_match('/^flexmlsAPI/', $class_name)) {
-			$file_name = preg_replace('/^flexmlsAPI\_/', '', $class_name);
+		if (preg_match('/^SparkAPI/', $class_name)) {
+			$file_name = preg_replace('/^SparkAPI\_/', '', $class_name);
 			include_once(dirname(realpath(__FILE__)) . '/' . $file_name . '.php');
 		}
 	}
 
 	function SetApplicationName($name) {
-		$this->SetHeader('X-flexmlsApi-User-Agent', str_replace(array("\r", "\r\n", "\n"), '', trim($name)));
+		$this->SetHeader('X-SparkApi-User-Agent', str_replace(array("\r", "\r\n", "\n"), '', trim($name)));
 	}
 
 	function SetDebugMode($mode = false) {
@@ -84,7 +84,7 @@ class flexmlsAPI_Core {
 
 	function SetDeveloperMode($enable = false) {
 		if ($enable) {
-			$this->api_base = "api.developers.flexmls.com";
+			$this->api_base = "api.developers.sparkapi.com";
 			return true;
 		}
 		else {
@@ -220,7 +220,7 @@ class flexmlsAPI_Core {
 	function MakeAPICall($method, $service, $cache_time = 0, $params = array(), $post_data = null, $a_retry = false) {
 
 		if ($this->transport == null) {
-			$this->SetTransport(new flexmlsAPI_CurlTransport);
+			$this->SetTransport(new SparkAPI_CurlTransport);
 		}
 
 		// parse format like "5m" into 300 seconds

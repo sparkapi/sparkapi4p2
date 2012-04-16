@@ -1,6 +1,6 @@
 <?php
 
-class flexmlsAPI_CoreTransport {
+class SparkAPI_CoreTransport {
 
 
 	function __construct() {

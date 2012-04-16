@@ -1,21 +1,21 @@
-flexmls API - version 2
+Spark API - version 2
 =====================
-A PHP wrapper for the flexmls REST API.  This version has enough differences from version 1 that upgrading will
+A PHP wrapper for the Spark REST API.  This version has enough differences from version 1 that upgrading will
 require changes to existing code.
 
 
 Documentation
 -------------
-For full information on the API, see  http://www.flexmls.com/developers
+For full information on the API, see http://sparkplatform.com/docs
 
 
 Usage Examples
 ------------------------
-    // include the flexmlsAPI core which autoloads other classes as necessary
+    // include the Spark core which autoloads other classes as necessary
     require_once("lib/Core.php");
 
-    // connect using flexmls API authentication
-    $api = new flexmlsAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
+    // connect using Spark API authentication
+    $api = new SparkAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
 
     // identify your application (optional)
     $api->SetApplicationName("MyPHPApplication/1.0");
@@ -40,7 +40,7 @@ Error Codes
   <thead>
     <tr>
       <th>HTTP Code</th>
-      <th>flexmls API Error Code</th>
+      <th>Spark API Error Code</th>
       <th>Automatic Retry</th>
       <th>Description</th>
     </tr>

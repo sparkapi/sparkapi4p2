@@ -1,6 +1,6 @@
 <?php
 
-class flexmlsAPI_WordPressCache implements flexmlsAPI_CacheInterface {
+class SparkAPI_WordPressCache implements SparkAPI_CacheInterface {
 
 	
 	function get($key) {
