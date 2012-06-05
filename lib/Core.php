@@ -84,7 +84,7 @@ class SparkAPI_Core {
 
 	function SetDeveloperMode($enable = false) {
 		if ($enable) {
-			$this->api_base = "api.developers.sparkapi.com";
+			$this->api_base = "developers.sparkapi.com";
 			return true;
 		}
 		else {
