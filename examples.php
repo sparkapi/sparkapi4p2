@@ -26,7 +26,7 @@ require_once("lib/Core.php");
  *
  * The interface for each client is idential.
  * To build the URI to redirect the end user to, invoke the "authentication_endpoint_uri" method, e.g.:
- *      header("Location: " . $api->authentication_endpoint_uri);
+ *      header("Location: " . $api->authentication_endpoint_uri());
  *
  * To issue a Grant request with the "code" value provided by the API:
  *
