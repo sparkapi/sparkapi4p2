@@ -14,10 +14,19 @@ require_once("lib/Core.php");
  *
  *      $api = new SparkAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
  *
- * With version 2.0, you can now authenticate using OAuth2 support.  For more details on OAuth2 with the Spark API,
- * see http://sparkplatform.com/docs/authentication/oauth2_authentication
+ * With version 2.0, you can now authenticate using either OpenId and OAuth2 or OAuth2 alone.
+ * For more details on OpenId and OAuth2 with the Spark API,
+ * see http://sparkplatform.com/docs/authentication/authentication
  *
+ * OpenId/OAuth2 Hybrid client
+ *      $api = new SparkAPI_Hybrid($client_id, $client_secret, $application_uri);
+ *
+ * OAuth2 only client
  *      $api = new SparkAPI_OAuth($client_id, $client_secret, $application_uri);
+ *
+ * The interface for each client is idential.
+ * To build the URI to redirect the end user to, invoke the "authentication_endpoint_uri" method, e.g.:
+ *      header("Location: " . $api->authentication_endpoint_uri);
  *
  * To issue a Grant request with the "code" value provided by the API:
  *

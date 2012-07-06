@@ -30,13 +30,17 @@ spl_autoload_register(array('SparkAPI_Core', 'autoload'));
 
 
 class SparkAPI_Core {
+	const DEFAULT_API_BASE = "sparkapi.com";
+	const DEVELOPERS_API_BASE = "developers.sparkapi.com";
+
 	public $api_client_version = '2.0';
 
-	public $api_base = "api.sparkapi.com";
+	public $api_base = self::DEFAULT_API_BASE;
 	public $api_version = "v1";
 
 	private $debug_mode = false;
 	private $debug_log = null;
+	protected $developer_mode = false;
 	protected $force_https = false;
 	protected $transport = null;
 	protected $cache = null;
@@ -83,13 +87,14 @@ class SparkAPI_Core {
 	}
 
 	function SetDeveloperMode($enable = false) {
+		$this->developer_mode = $enable;
 		if ($enable) {
-			$this->api_base = "api.developers.sparkapi.com";
-			return true;
+			$this->api_base = self::DEVELOPERS_API_BASE;
 		}
 		else {
-			return false;
+			$this->api_base = self::DEFAULT_API_BASE;
 		}
+		return $enable;
 	}
 
 	function SetTransport($transport) {
