@@ -254,7 +254,6 @@ class SparkAPI_Core {
 
 		if ($served_from_cache !== true) {
 			$response = $this->transport->make_request($request);
-			$response = $this->utf8_encode_mix($response);
 		}
 
 		$json = json_decode($response['body'], true);
