@@ -659,7 +659,7 @@ class SparkAPI_Core {
 	}
 
 	function GetCustomFieldList($field) {
-		$data = $this->return_first_result($this->MakeAPICall("GET", "customfields/" . $field, '24h'));
+		$data = $this->return_first_result($this->MakeAPICall("GET", "customfields/" . rawurlencode($field), '24h'));
 		if ($data && array_key_exists('FieldList', $data[$field]) ) {
 			return $data[$field]['FieldList'];
 		}
