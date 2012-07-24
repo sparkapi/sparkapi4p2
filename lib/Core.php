@@ -653,10 +653,19 @@ class SparkAPI_Core {
 	 * Custom Fields services
 	 */
 
-	function GetCustomFields($prop_type) {
-		return $this->return_all_results($this->MakeAPICall("GET", "customfields/" . $prop_type, '24h'));
+	function GetCustomFields() {
+		return $this->return_all_results($this->MakeAPICall("GET", "customfields", '24h'));
 	}
 
+	function GetCustomFieldList($field) {
+		$data = $this->return_first_result($this->MakeAPICall("GET", "customfields/" . rawurlencode($field), '24h'));
+		if ($data && array_key_exists('FieldList', $data[$field]) ) {
+			return $data[$field]['FieldList'];
+		}
+		else {
+			return array();
+		}
+	}
 
 	/*
 	 * System Info services
