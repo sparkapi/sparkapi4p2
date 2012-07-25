@@ -1,6 +1,6 @@
 <?php
 
-class flexmlsAPI_MemcacheCache implements flexmlsAPI_CacheInterface {
+class SparkAPI_MemcacheCache implements SparkAPI_CacheInterface {
 	protected $cache = null;
 	
 	protected $host = null;

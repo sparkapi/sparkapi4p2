@@ -1,6 +1,6 @@
 <?php
 
-class flexmlsAPI_MySQLiCache implements flexmlsAPI_CacheInterface {
+class SparkAPI_MySQLiCache implements SparkAPI_CacheInterface {
 	protected $cache = null;
 	
 	protected $hostname = null;

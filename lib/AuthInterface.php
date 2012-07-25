@@ -1,5 +1,5 @@
 <?php
 
-interface flexmlsAPI_AuthInterface {
+interface SparkAPI_AuthInterface {
 
 }

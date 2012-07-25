@@ -1,6 +1,9 @@
 <?php
 
-class flexmlsAPI_OAuth extends flexmlsAPI_Core implements flexmlsAPI_AuthInterface {
+class SparkAPI_OAuth extends SparkAPI_Core implements SparkAPI_AuthInterface {
+	const DEFAULT_AUTH_ENDPOINT = "https://sparkplatform.com/";
+	const DEVELOPERS_AUTH_ENDPOINT = "https://developers.sparkplatform.com/";
+
 	protected $force_https = true;
 	protected $api_client_id = null;
 	protected $api_client_secret = null;
@@ -20,6 +23,15 @@ class flexmlsAPI_OAuth extends flexmlsAPI_Core implements flexmlsAPI_AuthInterfa
 		parent::__construct();
 	}
 
+	function authentication_endpoint_uri($additional_params = array()) {
+		$params = array(
+			"response_type" => "code",
+			"client_id"     => $this->api_client_id,
+			"redirect_uri"  => $this->oauth_redirect_uri
+		);
+		return $this->authentication_host() . "oauth2?" . http_build_query(array_merge(params, additional_params));
+	}
+
 	function sign_request($request) {
 		$this->SetHeader('Authorization', 'OAuth '. $this->last_token);
 
@@ -27,6 +39,9 @@ class flexmlsAPI_OAuth extends flexmlsAPI_Core implements flexmlsAPI_AuthInterfa
 		$request['headers'] = $this->headers;
 		$request['query_string'] = http_build_query($request['params']);
 		$request['cacheable_query_string'] = $request['query_string'];
+
+		return $request;
+
 	}
 	
 	function is_auth_request($request) {
@@ -93,6 +108,15 @@ class flexmlsAPI_OAuth extends flexmlsAPI_Core implements flexmlsAPI_AuthInterfa
 	
 	function Ping() {
 		return $this->return_all_results( $this->MakeAPICall("GET", "my/account") );
+	}
+
+	protected function authentication_host() {
+		if ($this->developer_mode == true) {
+			return self::DEVELOPERS_AUTH_ENDPOINT;
+		}
+		else {
+			return self::DEFAULT_AUTH_ENDPOINT;
+		}
 	}
 
 }
