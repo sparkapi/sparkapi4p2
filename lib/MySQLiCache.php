@@ -48,8 +48,7 @@ class SparkAPI_MySQLiCache implements SparkAPI_CacheInterface {
 				return unserialize($row['cache_value']);
 			}
 		}
-
-		return null;
+		return false;
 	}
 
 	function set($key, $value, $expire) {
