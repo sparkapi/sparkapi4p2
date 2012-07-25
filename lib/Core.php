@@ -252,7 +252,7 @@ class SparkAPI_Core {
 
 		if ($this->cache and $method == "GET" and $a_retry != true and $seconds_to_cache > 0) {
 			$response = $this->cache->get($this->make_cache_key($request));
-			if ($response) {
+			if ($response !== null) {
 				$served_from_cache = true;
 			}
 		}

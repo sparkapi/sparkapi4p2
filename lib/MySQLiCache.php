@@ -45,10 +45,15 @@ class SparkAPI_MySQLiCache implements SparkAPI_CacheInterface {
 		if ($result = $this->conn->query($sql)) {
 			$row = $result->fetch_assoc();
 			if ($row !== null) {
-				return unserialize($row['cache_value']);
+				if(!$return = unserialize($row['cache_value'])){
+					return null;
+				} else {
+					return $return;
+				}
 			}
 		}
-		return false;
+
+		return null;
 	}
 
 	function set($key, $value, $expire) {
