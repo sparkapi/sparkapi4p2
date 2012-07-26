@@ -27,7 +27,7 @@ class SparkAPI_APIAuth extends SparkAPI_Core implements SparkAPI_AuthInterface {
 		$sec_string = "{$this->api_secret}ApiKey{$this->api_key}";
 		$post_body = "";
 		
-		if ($request['method'] == "POST" && !empty($request['post_data']) > 0) {
+		if (($request['method'] == "POST" || $request['method'] == "PUT") && !empty($request['post_data']) > 0) {
 			// the request is to post some JSON data back to the API (like adding a contact)
 			$post_body = $request['post_data'];
 		}

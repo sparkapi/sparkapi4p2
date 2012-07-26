@@ -146,6 +146,13 @@ print_r($result);
  * different requests for listings based on context
  */
 
+// Get all active listings, using the "get" method.
+$result = $api->get("listings", array(
+  "parameters" => array(
+    "_filter" => "MlsStatus Eq 'A'"
+  )
+));
+
 $result = $api->GetMyListings();
 // http://sparkplatform.com/docs/api_services/listings
 print_r($result);
