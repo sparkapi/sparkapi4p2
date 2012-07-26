@@ -21,8 +21,6 @@ class SparkAPI_CurlTransport extends SparkAPI_CoreTransport implements SparkAPI_
 	
 	function make_request($request = array()) {
 		
-		// print_r($request);
-				
 		$request_headers_flat = "";
 		foreach ($request['headers'] as $k => $v) {
 			$request_headers_flat .= "{$k}: {$v}\r\n";
@@ -53,10 +51,7 @@ class SparkAPI_CurlTransport extends SparkAPI_CoreTransport implements SparkAPI_
 		
 		$response_info['body'] = $response_body;
 		
-//		print_r($response_info);
-
 		return $response_info;
-
 	}
 
 }

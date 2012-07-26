@@ -761,6 +761,8 @@ class SparkAPI_Core {
 			$post_data = $this->make_sendable_body($post_data);
 		}
 
+		$service = trim($service, "/ ");
+
 		return $this->MakeAPICall($method, $service, $cache_time, $params, $post_data, $a_retry);
 	}
 
