@@ -149,9 +149,9 @@ class SparkAPI_Core {
 		$tag = substr($val, -1);
 		$time = substr($val, 0, -1);
 
-		if (empty($time)) {
-			// no trailing identifier given so assuming that what was given was in seconds
-			$time = $val;
+		// Assume seconds if no valid tag is passed.
+		if (!preg_match('/[wdhm]/', $tag)) {
+			return $val;
 		}
 
 		switch ($tag) {
