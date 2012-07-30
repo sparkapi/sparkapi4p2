@@ -437,8 +437,8 @@ class SparkAPI_Core {
 		return $this->return_all_results($this->MakeAPICall("GET", "accounts/by/office/" . $id, '1h', $params));
 	}
 
-	function GetMyAccount() {
-		return $this->return_first_result($this->MakeAPICall("GET", "my/account", '1h'));
+	function GetMyAccount($params = array()) {
+		return $this->return_first_result($this->MakeAPICall("GET", "my/account", '1h', $params));
 	}
 
 	function UpdateMyAccount($data) {
