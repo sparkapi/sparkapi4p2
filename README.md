@@ -33,6 +33,12 @@ Usage Examples
     // get your listings
     $result = $api->GetMyListings();
 
+	/*
+		Alternatively, if you cannot find the appropriate helper method,
+		try our "get", "post", "put", or "delete" methods from Core.php. 
+	*/
+	$result = $api->get("my/listings");
+
     // see the included examples.php for more complete usage
 
 Error Codes
