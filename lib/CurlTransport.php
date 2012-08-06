@@ -21,8 +21,6 @@ class SparkAPI_CurlTransport extends SparkAPI_CoreTransport implements SparkAPI_
 	
 	function make_request($request = array()) {
 		
-//		print_r($request);
-				
 		$request_headers_flat = "";
 		foreach ($request['headers'] as $k => $v) {
 			$request_headers_flat .= "{$k}: {$v}\r\n";
@@ -34,13 +32,16 @@ class SparkAPI_CurlTransport extends SparkAPI_CoreTransport implements SparkAPI_
 		}
 		
 		curl_setopt($this->ch, CURLOPT_URL, $full_url);
+		curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $request['method']);
+		curl_setopt($this->ch, CURLOPT_POST, 0);
 
 		if ($request['method'] == "POST") {
 			curl_setopt($this->ch, CURLOPT_POST, 1);
 			curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request['post_data']);
+
 		}
-		else {
-			curl_setopt($this->ch, CURLOPT_POST, 0);
+		elseif ($request['method'] == "PUT") {
+			curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request['post_data']);
 		}
 		
 		curl_setopt($this->ch, CURLOPT_HTTPHEADER, array(trim($request_headers_flat)));
@@ -50,10 +51,7 @@ class SparkAPI_CurlTransport extends SparkAPI_CoreTransport implements SparkAPI_
 		
 		$response_info['body'] = $response_body;
 		
-//		print_r($response_info);
-
 		return $response_info;
-
 	}
 
 }

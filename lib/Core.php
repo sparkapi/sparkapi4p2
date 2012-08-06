@@ -32,7 +32,7 @@ spl_autoload_register(array('SparkAPI_Core', 'autoload'));
 class SparkAPI_Core {
 	const DEFAULT_API_BASE = "sparkapi.com";
 	const DEVELOPERS_API_BASE = "developers.sparkapi.com";
-
+	
 	public $api_client_version = '2.0';
 
 	public $api_base = self::DEFAULT_API_BASE;
@@ -216,7 +216,6 @@ class SparkAPI_Core {
 			return false;
 		}
 	}
-
 
 	/*
 	 * API services
@@ -565,12 +564,6 @@ class SparkAPI_Core {
 
 
 	/*
-	 * Shared Listings services
-	 * TODO
-	 */
-
-
-	/*
 	 * IDX Links services
 	 */
 
@@ -686,5 +679,99 @@ class SparkAPI_Core {
 			return false;
 		}
 	}	
+
+	/**
+	 * Performs a GET request to Spark API.  Wraps MakeAPIRequest.
+	 * @param  $options  An array with the following potential attributes:
+	 *                     'cache_time' => The time, either in seconds or in the format
+	 *                                     specified by parse_cache_time, to cache the response.
+	 *                     'params'     => The array of request parameters to send along with
+	 *                                     the request.
+	 * @return array An array from the parsed JSON response.  This will typically be in the format:
+	 *                    'success' => true if the response was successful
+	 *                    'results' => An array of the "Results" attribute
+	 *               If success is false, consult $this->GetErrors().
+	 */
+	function get($service, $options = array()) {
+		return $this->wrapped_api_call('GET', $service, $options);
+	}
+
+	/**
+	 * Performs a POST request to Spark API.  Wraps MakeAPIRequest.
+	 * @param  $options  An array with the following potential attributes:
+	 *                     'cache_time' => The time, either in seconds or in the format
+	 *                                     specified by parse_cache_time, to cache the response.
+	 *                     'params'     => The array of request parameters to send along with
+	 *                                     the request.
+	 *                     'data'       => The POST data, as an array that will be later translated
+	 *                                     to JSON.  Ignore the "D" attribute -- we will wrap the data
+	 *                                     with the "D" attribute for you.
+	 * @return array An array from the parsed JSON response.  This will typically be in the format:
+	 *                    'success' => true if the response was successful
+	 *                    'results' => An array of the "Results" attribute
+	 *               If success is false, consult $this->GetErrors().
+	 */
+	function post($service, $options = array()) {
+		return $this->wrapped_api_call('POST', $service, $options);
+	}
+
+	/**
+	 * Performs a PUT request to Spark API.  Wraps MakeAPIRequest.
+	 * @param  $options  An array with the following potential attributes:
+	 *                     'cache_time' => The time, either in seconds or in the format
+	 *                                     specified by parse_cache_time, to cache the response.
+	 *                     'params'     => The array of request parameters to send along with
+	 *                                     the request.
+	 *                     'data'       => The PUT data, as an array that will be later translated
+	 *                                     to JSON.  Ignore the "D" attribute -- we will wrap the data
+	 *                                     with the "D" attribute for you.
+	 * @return array An array from the parsed JSON response.  This will typically be in the format:
+	 *                    'success' => true if the response was successful
+	 *                    'results' => An array of the "Results" attribute
+	 *               If success is false, consult $this->GetErrors().
+	 */
+	function put($service, $options = array()) {
+		return $this->wrapped_api_call('PUT', $service, $options);
+	}
+
+	/**
+	 * Performs a DELETE request to Spark API.  Wraps MakeAPIRequest.
+	 * @param  $options  An array with the following potential attributes:
+	 *                     'cache_time' => The time, either in seconds or in the format
+	 *                                     specified by parse_cache_time, to cache the response.
+	 *                     'params'     => The array of request parameters to send along with
+	 *                                     the request.
+	 * @return array An array from the parsed JSON response.  This will typically be in the format:
+	 *                    'success' => true if the response was successful
+	 *                    'results' => An array of the "Results" attribute
+	 *               If success is false, consult $this->GetErrors().
+	 */
+	function delete($service, $options = array()) {
+		return $this->wrapped_api_call('DELETE', $service, $options);
+	}
+
+	protected function extract_from_request_options($key, $options=array(), $default) {
+		if (array_key_exists($key, $options)) {
+			return $options[$key];
+		}
+		else {
+			return $default;
+		}
+	}
+
+	protected function wrapped_api_call($method, $service, $options) {
+		$cache_time = $this->extract_from_request_options('cache_time', $options, 0);
+		$params     = $this->extract_from_request_options('parameters', $options, array());
+		$post_data  = $this->extract_from_request_options('data',       $options, null);
+		$a_retry    = $this->extract_from_request_options('retry',      $options, false);
+
+		if ($post_data) {
+			$post_data = $this->make_sendable_body($post_data);
+		}
+
+		$service = trim($service, "/ ");
+
+		return $this->MakeAPICall($method, $service, $cache_time, $params, $post_data, $a_retry);
+	}
 
 }
