@@ -685,7 +685,7 @@ class SparkAPI_Core {
 	 * @param  $options  An array with the following potential attributes:
 	 *                     'cache_time' => The time, either in seconds or in the format
 	 *                                     specified by parse_cache_time, to cache the response.
-	 *                     'params'     => The array of request parameters to send along with
+	 *                     'parameters' => The array of request parameters to send along with
 	 *                                     the request.
 	 * @return array An array from the parsed JSON response.  This will typically be in the format:
 	 *                    'success' => true if the response was successful
@@ -701,7 +701,7 @@ class SparkAPI_Core {
 	 * @param  $options  An array with the following potential attributes:
 	 *                     'cache_time' => The time, either in seconds or in the format
 	 *                                     specified by parse_cache_time, to cache the response.
-	 *                     'params'     => The array of request parameters to send along with
+	 *                     'parameters' => The array of request parameters to send along with
 	 *                                     the request.
 	 *                     'data'       => The POST data, as an array that will be later translated
 	 *                                     to JSON.  Ignore the "D" attribute -- we will wrap the data
@@ -720,7 +720,7 @@ class SparkAPI_Core {
 	 * @param  $options  An array with the following potential attributes:
 	 *                     'cache_time' => The time, either in seconds or in the format
 	 *                                     specified by parse_cache_time, to cache the response.
-	 *                     'params'     => The array of request parameters to send along with
+	 *                     'parameters' => The array of request parameters to send along with
 	 *                                     the request.
 	 *                     'data'       => The PUT data, as an array that will be later translated
 	 *                                     to JSON.  Ignore the "D" attribute -- we will wrap the data
@@ -739,7 +739,7 @@ class SparkAPI_Core {
 	 * @param  $options  An array with the following potential attributes:
 	 *                     'cache_time' => The time, either in seconds or in the format
 	 *                                     specified by parse_cache_time, to cache the response.
-	 *                     'params'     => The array of request parameters to send along with
+	 *                     'parameters' => The array of request parameters to send along with
 	 *                                     the request.
 	 * @return array An array from the parsed JSON response.  This will typically be in the format:
 	 *                    'success' => true if the response was successful
