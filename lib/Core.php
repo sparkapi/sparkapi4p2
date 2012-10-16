@@ -31,7 +31,12 @@ spl_autoload_register(array('SparkAPI_Core', 'autoload'));
 
 class SparkAPI_Core {
 	const DEFAULT_API_BASE = "sparkapi.com";
-	const DEVELOPERS_API_BASE = "developers.sparkapi.com";
+
+  /* 
+    We'll no longer advertise a seperate domain for development,
+    but will keep the logic around for backwards compat.
+   */
+	const DEVELOPERS_API_BASE = "sparkapi.com";
 	
 	public $api_client_version = '2.0';
 
