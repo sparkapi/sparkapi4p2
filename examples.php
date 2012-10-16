@@ -61,10 +61,6 @@ $api = new SparkAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
 // identify your application (optional)
 $api->SetApplicationName("PHP-API-Code-Examples/1.0");
 
-// enable developer mode.  this points you to a sandbox for development use
-$api->SetDeveloperMode(true);
-
-
 /*
  * enable built-in caching system
  * New in version 2.0
