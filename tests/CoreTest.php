@@ -37,4 +37,29 @@ class SparkApi_CoreTest extends PHPUnit_Framework_TestCase {
 			$this->assertEquals($value, $this->core->parse_cache_time($key));
 		}
 	}
+
+	public function testSetErrors() {
+		$this->core->SetErrors(null, "This is a random error");
+		$this->assertNull(null, $this->core->last_error_code);
+		$this->assertEquals("This is a random error", $this->core->last_error_mess);
+
+		$this->core->SetErrors(1020, "Some message");
+		$this->assertEquals(1020, $this->core->last_error_code);
+		$this->assertEquals("Some message", $this->core->last_error_mess);
+	}
+
+	public function testResetErrors() {
+		$this->core->SetErrors(1020, "This is a random error");
+		$this->core->ResetErrors();
+		$this->assertFalse($this->core->last_error_code);
+		$this->assertFalse($this->core->last_error_mess);
+	}
+
+	public function testGetErrors() {
+		$this->core->ResetErrors();
+		$this->assertFalse($this->core->GetErrors());
+
+		$this->core->SetErrors(1020, "This is a random error");
+		$this->assertEquals("1020 - This is a random error", $this->core->GetErrors());
+	}
 }
