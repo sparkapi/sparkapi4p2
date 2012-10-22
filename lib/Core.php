@@ -31,6 +31,7 @@ spl_autoload_register(array('SparkAPI_Core', 'autoload'));
 
 class SparkAPI_Core {
 	const DEFAULT_API_BASE = "sparkapi.com";
+	const DEFAULT_PLATFORM_BASE = "sparkplatform.com";
 
   /* 
     We'll no longer advertise a seperate domain for development,
@@ -41,6 +42,7 @@ class SparkAPI_Core {
 	public $api_client_version = '2.0';
 
 	public $api_base = self::DEFAULT_API_BASE;
+	public $platform_base = self::DEFAULT_PLATFORM_BASE;
 	public $api_version = "v1";
 
 	private $debug_mode = false;
@@ -228,9 +230,7 @@ class SparkAPI_Core {
 
 	function MakeAPICall($method, $service, $cache_time = 0, $params = array(), $post_data = null, $a_retry = false) {
 	
-		// reset last error code
-		$this->last_error_code = false;
-		$this->last_error_mess = false;
+		$this->ResetErrors();
 
 		if ($this->transport == null) {
 			$this->SetTransport(new SparkAPI_CurlTransport);
@@ -324,8 +324,7 @@ class SparkAPI_Core {
 		if (array_key_exists('error', $json)) {
 			// looks like a failed OAuth grant response
 			$return['success'] = false;
-			$this->last_error_code = $json['error'];
-			$this->last_error_mess = $json['error_description'];
+			$this->SetErrors($json['error'], $json['error_description']);
 		}
 
 		if ($return['success'] == true and $served_from_cache != true and $method == "GET" and $seconds_to_cache > 0) {
@@ -676,6 +675,15 @@ class SparkAPI_Core {
 	/*
 	 * Error services
 	 */
+	function SetErrors($code, $message) {
+		$this->last_error_code = $code;
+		$this->last_error_mess = $message;
+	}
+
+	function ResetErrors() {
+		$this->last_error_code = false;
+		$this->last_error_mess = false;
+	}
 
 	function GetErrors() {
 		if ($this->last_error_code || $this->last_error_mess){
@@ -753,6 +761,46 @@ class SparkAPI_Core {
 	 */
 	function delete($service, $options = array()) {
 		return $this->wrapped_api_call('DELETE', $service, $options);
+	}
+
+	function GetSparkBarToken($access_token) {
+
+		$this->ResetErrors();
+
+		if ($this->transport == null) {
+			$this->SetTransport(new SparkAPI_CurlTransport);
+		}
+
+		$spark_bar_headers = $this->headers;
+		unset($spark_bar_headers["Content-Type"]);
+
+		$request = array(
+			'protocol' => 'https',
+			'method' => 'POST',
+			'uri' => '/appbar/authorize',
+			'host' => $this->platform_base,
+			'headers' => $spark_bar_headers,
+			'post_data' => array("access_token" => $access_token)
+		);
+
+		$response = $this->transport->make_request($request);
+		$json = json_decode($response['body'], true);
+
+		if (!is_array($json)) {
+			return $this->SetErrors(null, "An unknown error occurred when retrieving your sparkbar token.");
+		}
+
+		$token = null;
+		if (array_key_exists('success', $json)) {
+			if ($json['success'] == True) {
+				$token = $json["token"];
+			}
+			else {
+				return $this->SetErrors(null, $json['error']);
+			}
+		}
+
+		return $token;
 	}
 
 	protected function extract_from_request_options($key, $options=array(), $default) {
