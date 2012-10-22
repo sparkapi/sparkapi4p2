@@ -29,7 +29,7 @@ class SparkAPI_OAuth extends SparkAPI_Core implements SparkAPI_AuthInterface {
 			"client_id"     => $this->api_client_id,
 			"redirect_uri"  => $this->oauth_redirect_uri
 		);
-		return $this->authentication_host() . "oauth2?" . http_build_query(array_merge(params, additional_params));
+		return $this->authentication_host() . "oauth2?" . http_build_query(array_merge($params, $additional_params));
 	}
 
 	function sign_request($request) {
