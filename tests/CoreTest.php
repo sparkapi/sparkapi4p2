@@ -1,6 +1,4 @@
 <?php
-require_once 'tests/TestHelpers.php';
-require_once 'PHPUnit/Framework/TestCase.php';
 
 class SparkApi_CoreTest extends PHPUnit_Framework_TestCase {
 	private $core;
