@@ -294,6 +294,11 @@ class SparkAPI_Core {
 				$this->total_pages = $json['D']['Pagination']['TotalPages'];
 				$this->current_page = $json['D']['Pagination']['CurrentPage'];
 			}
+
+			if (array_key_exists('LastUpdated', $json['D'])) {
+				$return['last_updated'] = $json['D']['LastUpdated'];
+			}
+
 			else {
 				$this->last_count = null;
 				$this->page_size = null;
