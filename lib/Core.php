@@ -65,6 +65,8 @@ class SparkAPI_Core {
 	public $current_page = null;
 	public $page_size = null;
 
+	public $last_updated = null;
+
 	public $last_error_code = null;
 	public $last_error_mess = null;
 
@@ -296,6 +298,7 @@ class SparkAPI_Core {
 			}
 
 			if (array_key_exists('LastUpdated', $json['D'])) {
+				$this->last_updated = $json['D']['LastUpdated'];
 				$return['last_updated'] = $json['D']['LastUpdated'];
 			}
 
