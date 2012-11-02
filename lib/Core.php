@@ -307,6 +307,7 @@ class SparkAPI_Core {
 				$this->page_size = null;
 				$this->total_pages = null;
 				$this->current_page = null;
+				$this->last_updated = null;
 			}
 
 			if ($json['D']['Success'] == true) {
