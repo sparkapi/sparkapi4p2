@@ -300,12 +300,13 @@ class SparkAPI_Core {
 				$this->page_size = null;
 				$this->total_pages = null;
 				$this->current_page = null;
-				$this->last_updated = null;
 			}
 
 			if (array_key_exists('LastUpdated', $json['D'])) {
 				$this->last_updated = $json['D']['LastUpdated'];
 				$return['last_updated'] = $json['D']['LastUpdated'];
+			} else {
+				$this->last_updated = null;
 			}
 
 
