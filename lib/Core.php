@@ -295,20 +295,20 @@ class SparkAPI_Core {
 				$this->page_size = $json['D']['Pagination']['PageSize'];
 				$this->total_pages = $json['D']['Pagination']['TotalPages'];
 				$this->current_page = $json['D']['Pagination']['CurrentPage'];
+			} else {
+				$this->last_count = null;
+				$this->page_size = null;
+				$this->total_pages = null;
+				$this->current_page = null;
 			}
 
 			if (array_key_exists('LastUpdated', $json['D'])) {
 				$this->last_updated = $json['D']['LastUpdated'];
 				$return['last_updated'] = $json['D']['LastUpdated'];
-			}
-
-			else {
-				$this->last_count = null;
-				$this->page_size = null;
-				$this->total_pages = null;
-				$this->current_page = null;
+			} else {
 				$this->last_updated = null;
 			}
+
 
 			if ($json['D']['Success'] == true) {
 				$return['success'] = true;
