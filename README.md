@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sparkapi/sparkapi4p2.png)](https://travis-ci.org/sparkapi/sparkapi4p2)
+
 Spark API - version 2
 =====================
 A PHP wrapper for the Spark REST API.  This version has enough differences from version 1 that upgrading will
