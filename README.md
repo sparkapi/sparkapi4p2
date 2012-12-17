@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sparkapi/sparkapi4p2.png)](https://travis-ci.org/sparkapi/sparkapi4p2)
+[![Build Status](https://travis-ci.org/sparkapi/sparkapi4p2.png?branch=master)](https://travis-ci.org/sparkapi/sparkapi4p2)
 
 Spark API - version 2
 =====================
