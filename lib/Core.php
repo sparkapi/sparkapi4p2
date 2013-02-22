@@ -833,9 +833,11 @@ class SparkAPI_Core {
 
 		$tagstest = explode("/", $service);
 
-		if ($tagstest[1] == "tags" and count($tagstest) == 3) {
-			$tagstest[2] = rawurlencode($tagstest[2]);
-			$service = implode("/", $tagstest);
+		if (count($tagstest) >= 3) {
+			if ($tagstest[1] == "tags") {
+				echo $tagstest[2] = rawurlencode($tagstest[2]);
+				echo $service = implode("/", $tagstest);
+			}
 		}
 
 		$service = trim($service, "/ ");
