@@ -833,7 +833,7 @@ class SparkAPI_Core {
 
 		$tagstest = explode("/", $service);
 
-		if ($tagstest[1] = "tags" and count($tagstest) == 3) {
+		if ($tagstest[1] == "tags" and count($tagstest) == 3) {
 			$tagstest[2] = rawurlencode($tagstest[2]);
 			$service = implode("/", $tagstest);
 		}
