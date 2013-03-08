@@ -830,7 +830,6 @@ class SparkAPI_Core {
 		if ($post_data) {
 			$post_data = $this->make_sendable_body($post_data);
 		}
-		$service = rawurlencode($service);
 		$service = trim($service, "/ ");
 
 		return $this->MakeAPICall($method, $service, $cache_time, $params, $post_data, $a_retry);
