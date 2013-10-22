@@ -46,7 +46,7 @@ class SparkAPI_Core {
 	public $api_version = "v1";
 
 	private $debug_mode = false;
-	private $debug_log = null;
+	private $debug_file = "debug.txt";
 	protected $developer_mode = false;
 	protected $force_https = false;
 	protected $transport = null;
@@ -94,6 +94,11 @@ class SparkAPI_Core {
 	function SetDebugMode($mode = false) {
 		$this->debug_mode = $mode;
 	}
+	
+	function SetDebugFile($logfile) {
+		$this->debug_file = $logfile;
+		return true;
+	}
 
 	function SetDeveloperMode($enable = false) {
 		$this->developer_mode = $enable;
@@ -128,11 +133,7 @@ class SparkAPI_Core {
 		$this->cache_prefix = $prefix;
 		return true;
 	}
-
-	function Log($message) {
-		$this->debug_log .= $message . PHP_EOL;
-	}
-
+	
 	function SetHeader($key, $value) {
 		$this->headers[$key] = $value;
 		return true;
@@ -275,6 +276,12 @@ class SparkAPI_Core {
 
 		if (!is_array($json)) {
 			// the response wasn't JSON as expected so bail out with the original, unparsed body
+			SetErrors(null, "Invalid response body format - Expected JSON \n" . $response['body']);
+			
+			if ($this->debug_mode == true) {
+				$this->Log($this->GetErrors());
+			}
+			
 			$return['body'] = $response['body'];
 			return $return;
 		}
@@ -289,7 +296,7 @@ class SparkAPI_Core {
 				$this->last_error_mess = $json['D']['Message'];
 				$return['api_message'] = $json['D']['Message'];
 			}
-
+			
 			if (array_key_exists('Pagination', $json['D'])) {
 				$this->last_count = $json['D']['Pagination']['TotalRows'];
 				$this->page_size = $json['D']['Pagination']['PageSize'];
@@ -333,7 +340,7 @@ class SparkAPI_Core {
 		if (array_key_exists('error', $json)) {
 			// looks like a failed OAuth grant response
 			$return['success'] = false;
-			$this->SetErrors($json['error'], $json['error_description']);
+			$this->SetErrors($json['error'], $json['error_description']);			
 		}
 
 		if ($return['success'] == true and $served_from_cache != true and $method == "GET" and $seconds_to_cache > 0) {
@@ -354,6 +361,10 @@ class SparkAPI_Core {
 			}
 		}
 
+		if ($this->debug_mode == true) {
+				$this->Log($this->GetErrors());
+		}
+		
 		return $return;
 
 	}
@@ -684,6 +695,7 @@ class SparkAPI_Core {
 	/*
 	 * Error services
 	 */
+	 
 	function SetErrors($code, $message) {
 		$this->last_error_code = $code;
 		$this->last_error_mess = $message;
@@ -701,6 +713,21 @@ class SparkAPI_Core {
 			return false;
 		}
 	}	
+	
+	function Log($message) {
+		if ($message){
+			date_default_timezone_set('America/Chicago'); //needs to be set for date logging
+			error_log(date('Y-m-d H:i:s') . ' - ' . $message . PHP_EOL, 3, $this->debug_file);
+			
+			$this->ResetErrors();
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 
 	/**
 	 * Performs a GET request to Spark API.  Wraps MakeAPIRequest.
