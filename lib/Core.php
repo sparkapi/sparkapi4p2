@@ -44,9 +44,7 @@ class SparkAPI_Core {
 	public $api_base = self::DEFAULT_API_BASE;
 	public $platform_base = self::DEFAULT_PLATFORM_BASE;
 	public $api_version = "v1";
-
-	private $debug_mode = false;
-	private $debug_log = null;
+	
 	protected $developer_mode = false;
 	protected $force_https = false;
 	protected $transport = null;
@@ -91,10 +89,6 @@ class SparkAPI_Core {
 		$this->SetHeader('X-SparkApi-User-Agent', str_replace(array("\r", "\r\n", "\n"), '', trim($name)));
 	}
 
-	function SetDebugMode($mode = false) {
-		$this->debug_mode = $mode;
-	}
-
 	function SetDeveloperMode($enable = false) {
 		$this->developer_mode = $enable;
 		if ($enable) {
@@ -128,11 +122,7 @@ class SparkAPI_Core {
 		$this->cache_prefix = $prefix;
 		return true;
 	}
-
-	function Log($message) {
-		$this->debug_log .= $message . PHP_EOL;
-	}
-
+	
 	function SetHeader($key, $value) {
 		$this->headers[$key] = $value;
 		return true;
@@ -275,6 +265,11 @@ class SparkAPI_Core {
 
 		if (!is_array($json)) {
 			// the response wasn't JSON as expected so bail out with the original, unparsed body
+			SetErrors(null, "Invalid response body format - Expected JSON \n" . $response['body']);
+			
+			$this->Log($this->GetErrors());
+			$this->ResetErrors();
+			
 			$return['body'] = $response['body'];
 			return $return;
 		}
@@ -354,6 +349,9 @@ class SparkAPI_Core {
 			}
 		}
 
+		$this->Log($this->GetErrors());
+		$this->ResetErrors();
+		
 		return $return;
 
 	}
@@ -684,6 +682,7 @@ class SparkAPI_Core {
 	/*
 	 * Error services
 	 */
+	 
 	function SetErrors($code, $message) {
 		$this->last_error_code = $code;
 		$this->last_error_mess = $message;
@@ -701,6 +700,18 @@ class SparkAPI_Core {
 			return false;
 		}
 	}	
+	
+	function Log($message) {
+		if (ini_get('log_errors') == true && $message){
+			error_log("Spark Api Client/" . $this->api_client_version . ' - ' . $message, 0);
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 
 	/**
 	 * Performs a GET request to Spark API.  Wraps MakeAPIRequest.
