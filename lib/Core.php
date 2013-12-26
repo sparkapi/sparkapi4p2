@@ -265,7 +265,7 @@ class SparkAPI_Core {
 
 		if (!is_array($json)) {
 			// the response wasn't JSON as expected so bail out with the original, unparsed body
-			SetErrors(null, "Invalid response body format - Expected JSON \n" . $response['body']);
+			$this->SetErrors(null, "Invalid response body format - Expected JSON \n" . $response['body']);
 			
 			$this->Log($this->GetErrors());
 			$this->ResetErrors();
