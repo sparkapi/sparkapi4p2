@@ -335,7 +335,7 @@ class SparkAPI_Core {
 		}
 
 		if ($return['success'] == true and $served_from_cache != true and $method == "GET" and $seconds_to_cache > 0) {
-			if ($this->cache) {
+			if ($this->cache and !$random) {
 				$this->cache->set($this->make_cache_key($request), $response, $seconds_to_cache);
 			}
 		}
