@@ -232,7 +232,7 @@ class SparkAPI_Core {
 		$seconds_to_cache = $this->parse_cache_time($cache_time);
 		
 		// check if it's a random orderby
-		$random = $params['_orderby'] == 'Random' ? true : false;
+		$random = (array_key_exists('_orderby', $params) && $params['_orderby'] == 'Random') ? true : false;
 
 		$request = array(
 			'protocol' => ($this->force_https or $service == 'session') ? 'https' : 'http',
