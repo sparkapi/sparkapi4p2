@@ -432,6 +432,10 @@ class SparkAPI_Core {
 	function GetSharedListingNotes($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/shared/notes", '10m'));
 	}
+	
+	function GetListingsClustered($params = array()) {
+		return $this->return_all_results($this->MakeAPICall("GET", "listings/clusters", '10m', $params));
+	}
 
 
 	/*
@@ -528,7 +532,10 @@ class SparkAPI_Core {
 	function DeleteListingsFromCart($id, $listings) {
 		return $this->return_all_results($this->MakeAPICall("DELETE", "listingcarts/" . $id . "/listings/" . $listings));
 	}
-
+	
+	function InitiateContactPortal($contact_id){
+		return $this->MakeAPICall("POST", "contacts/".$contact_id."/portal");
+	}
 
 	/*
 	 * Market Statistics services
