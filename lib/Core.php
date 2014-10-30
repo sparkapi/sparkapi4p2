@@ -572,6 +572,15 @@ class SparkAPI_Core {
 	function GetSavedSearch($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "savedsearches/" . $id, '30m'));
 	}
+	
+	function GetProvidedSavedSearches() {
+		return $this->return_all_results($this->MakeAPICall("GET", "provided/savedsearches", '30m'));
+	}
+
+	function GetProvidedSavedSearch($id) {
+		return $this->return_all_results($this->MakeAPICall("GET", "provided/savedsearches/" . $id, '30m'));
+	}
+
 
 
 	/*
