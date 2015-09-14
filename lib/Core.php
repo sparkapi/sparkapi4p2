@@ -303,6 +303,9 @@ class SparkAPI_Core {
 			} else {
 				$this->last_updated = null;
 			}
+			if (array_key_exists('SparkQLErrors', $json['D'])) {
+				$return['sparkqlerrors'] = $json['D']['SparkQLErrors'];	
+			}
 
 
 			if ($json['D']['Success'] == true) {
