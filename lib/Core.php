@@ -230,6 +230,9 @@ class SparkAPI_Core {
 
 		// parse format like "5m" into 300 seconds
 		$seconds_to_cache = $this->parse_cache_time($cache_time);
+		
+		// check if it's a random orderby
+		$random = (array_key_exists('_orderby', $params) && $params['_orderby'] == 'Random') ? true : false;
 
 		$request = array(
 			'protocol' => ($this->force_https or $service == 'session') ? 'https' : 'http',
@@ -246,7 +249,7 @@ class SparkAPI_Core {
 
 		$served_from_cache = false;
 
-		if ($this->cache and $method == "GET" and $a_retry != true and $seconds_to_cache > 0) {
+		if ($this->cache and $method == "GET" and $a_retry != true and $seconds_to_cache > 0 and !$random) {
 			$response = $this->cache->get($this->make_cache_key($request));
 			if ($response !== null) {
 				$served_from_cache = true;
@@ -332,7 +335,7 @@ class SparkAPI_Core {
 		}
 
 		if ($return['success'] == true and $served_from_cache != true and $method == "GET" and $seconds_to_cache > 0) {
-			if ($this->cache) {
+			if ($this->cache and !$random) {
 				$this->cache->set($this->make_cache_key($request), $response, $seconds_to_cache);
 			}
 		}
@@ -428,6 +431,10 @@ class SparkAPI_Core {
 
 	function GetSharedListingNotes($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/shared/notes", '10m'));
+	}
+	
+	function GetListingsClustered($params = array()) {
+		return $this->return_all_results($this->MakeAPICall("GET", "listings/clusters", '10m', $params));
 	}
 
 
@@ -525,7 +532,10 @@ class SparkAPI_Core {
 	function DeleteListingsFromCart($id, $listings) {
 		return $this->return_all_results($this->MakeAPICall("DELETE", "listingcarts/" . $id . "/listings/" . $listings));
 	}
-
+	
+	function InitiateContactPortal($contact_id){
+		return $this->MakeAPICall("POST", "contacts/".$contact_id."/portal");
+	}
 
 	/*
 	 * Market Statistics services
