@@ -194,7 +194,7 @@ class SparkAPI_Core {
 	}
 
 	function return_all_results($response) {
-		if ($response['success'] == true) {
+		if (isset($response['success'] && $response['success'] == true) {
 			return $response['results'];
 		}
 		else {
