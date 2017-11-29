@@ -31,7 +31,6 @@ class SparkAPI_OIDCAuth extends SparkAPI_Core implements SparkAPI_AuthInterface
 
         $oidc->setRedirectURL($this->redirect_uri);
         $oidc->addAuthParam([
-            'X-SparkApi-User-Agent' => 'SparkOIDC',
             'User-Agent' => 'SparkOIDC'
         ]);
 
@@ -40,8 +39,7 @@ class SparkAPI_OIDCAuth extends SparkAPI_Core implements SparkAPI_AuthInterface
             $this->SetAccessToken($oidc->getAccessToken());
             $this->SetRefreshToken($oidc->getRefreshToken());
         } catch (OpenIDConnectClientException $e) {
-            var_dump($e->getMessage());
-            die();
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
     }
 
