@@ -30,9 +30,6 @@ class SparkAPI_OIDCAuth extends SparkAPI_Core implements SparkAPI_AuthInterface
         );
 
         $oidc->setRedirectURL($this->redirect_uri);
-        $oidc->addAuthParam([
-            'User-Agent' => 'SparkOIDC'
-        ]);
 
         try {
             $oidc->authenticate();
