@@ -1,6 +1,6 @@
 <?php
 
-class SparkApi_CoreTest extends PHPUnit_Framework_TestCase {
+class SparkApi_CoreTest extends \PHPUnit\Framework\TestCase {
 	private $core;
 
 	public function setUp() {
