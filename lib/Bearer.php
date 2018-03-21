@@ -1,13 +1,6 @@
 <?php
 
-
-namespace App;
-
-
-use SparkAPI_AuthInterface;
-use SparkAPI_Core;
-
-class Bearer extends SparkAPI_Core implements SparkAPI_AuthInterface
+class SparkAPI_Bearer extends SparkAPI_Core implements SparkAPI_AuthInterface
 {
     public $access_token;
 
