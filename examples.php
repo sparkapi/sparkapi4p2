@@ -10,56 +10,16 @@ require_once("lib/Core.php");
  * authenticate with the API
  * Changed in version 2.0
  *
- * The newest version of the PHP API client (version 2.0) allows you to select which authentication method
- * you'd like to use against the API.  Version 1.0 was limited to the Spark API authentication method and is
- * now done using:
- *
- *      $api = new SparkAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
- *
- * With version 2.0, you can now authenticate using either OpenId and OAuth2 or OAuth2 alone.
- * For more details on OpenId and OAuth2 with the Spark API,
- * see http://sparkplatform.com/docs/authentication/authentication
- *
- * OpenId/OAuth2 Hybrid client
- *      $api = new SparkAPI_Hybrid($client_id, $client_secret, $application_uri);
- *
- * OAuth2 only client
- *      $api = new SparkAPI_OAuth($client_id, $client_secret, $application_uri);
- *
- * The interface for each client is idential.
- * To build the URI to redirect the end user to, invoke the "authentication_endpoint_uri" method, e.g.:
- *      header("Location: " . $api->authentication_endpoint_uri());
- *
- * To issue a Grant request with the "code" value provided by the API:
- *
- *      $result = $api->Grant($code_value);
- *
- * A successful response will populate 2 new variables:
- *
- *      $api->oauth_access_token
- *      $api->oauth_refresh_token
- *
- * These values can be saved and re-used in future requests using:
- *
- *      $api->SetAccessToken($previous_access_token);
- *      $api->SetRefreshToken($previous_refresh_token);
- *
- * Also, for convenience, if the access token has expired and the refresh token is used to automatically have a new access
- * token generated, a hook is available to notify you of the new tokens:
- *
- *      $api->SetNewAccessCallback('new_token_given');
- *
- * which executes a function called "new_token_given" with 2 arguments:
- *
- *      * the type of grant which resulted in new tokens.  "authorization_code" or "refresh_token"
- *      * the values (in array format).  "access_token", "refresh_token" and "expires_in" are the 3 array keys
- *
+ * There are two authentication methods that we fully support - OpenID Connect and Access Token Authentication. Additional,  
+ * albeit deprecated, authentication examples are available on the wiki.  
  */
 
-$api = new SparkAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
+// To utilize OpenID Connect Authentication see the wiki page here: https://github.com/sparkapi/sparkapi4p2/wiki/OpenID-Connect-Authentication
+$api = new SparkAPI_SparkAPI_Bearer("your_access_token_here"); 
 
 // identify your application (optional)
 $api->SetApplicationName("PHP-API-Code-Examples/1.0");
+
 
 /*
  * enable built-in caching system
@@ -112,13 +72,6 @@ $api->SetApplicationName("PHP-API-Code-Examples/1.0");
  */
 
 
-// authenticate
-$result = $api->Authenticate();
-if ($result === false) {
-    echo "API Error Code: {$api->last_error_code}<br>\n";
-    echo "API Error Message: {$api->last_error_mess}<br>\n";
-    exit;
-}
 
 /*
  * request some basic account and system information
