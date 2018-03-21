@@ -13,24 +13,17 @@ For additional information on the PHP client, [visit the wiki](https://github.co
 For full information on the API, see http://sparkplatform.com/docs
 
 
-Usage Examples
+Usage Examples 
 ------------------------
     // include the Spark core which autoloads other classes as necessary
     require_once("lib/Core.php");
 
-    // connect using Spark API authentication
-    $api = new SparkAPI_APIAuth("api_key_goes_here", "api_secret_goes_here");
+    // connect using Access Token Authentication (additional authentication methods available in the wiki)
+    $api = new SparkAPI_Bearer("your_access_token_here");
 
     // identify your application (optional)
     $api->SetApplicationName("MyPHPApplication/1.0");
 
-    // authenticate
-    $result = $api->Authenticate();
-    if ($result === false) {
-        echo "API Error Code: {$api->last_error_code}<br>\n";
-        echo "API Error Message: {$api->last_error_mess}<br>\n";
-        exit;
-    }
 
     // get your listings
     $result = $api->GetMyListings();
