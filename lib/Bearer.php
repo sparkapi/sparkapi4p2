@@ -13,7 +13,7 @@ class SparkAPI_Bearer extends SparkAPI_Core implements SparkAPI_AuthInterface
 
     function sign_request($request) {
         $this->SetHeader('Authorization', 'Bearer '. $this->access_token);
-        $this->SetHeader('X-SparkApi-User-Agent', 'Thinkery');
+        $this->SetHeader('X-SparkApi-User-Agent', 'Spark API Application');
 
         // reload headers into request
         $request['headers'] = $this->headers;
