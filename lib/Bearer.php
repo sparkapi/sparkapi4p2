@@ -22,4 +22,8 @@ class SparkAPI_Bearer extends SparkAPI_Core implements SparkAPI_AuthInterface
 
         return $request;
     }
+    
+    function is_auth_request($request) {
+    	    return false;
+    }
 }
