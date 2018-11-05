@@ -502,7 +502,7 @@ class SparkAPI_Core {
 	}
 
 	function GetListingCartsWithListing($id) {
-		return $this->return_all_results($this->MakeAPICall("GET", "listingcarts/for/listing/" . $id));
+		return $this->return_all_results($this->MakeAPICall("GET", "listingcarts/for/" . $id));
 	}
 
 	function GetPortalListingCarts() {
