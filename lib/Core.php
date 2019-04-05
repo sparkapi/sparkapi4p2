@@ -834,7 +834,7 @@ class SparkAPI_Core {
 
 		$token = null;
 		if (array_key_exists('success', $json)) {
-			if ($json['success'] == True) {
+			if ($json['success'] == true) {
 				$token = $json["token"];
 			}
 			else {
