@@ -15,7 +15,7 @@ require_once("lib/Core.php");
  */
 
 // To utilize OpenID Connect Authentication see the wiki page here: https://github.com/sparkapi/sparkapi4p2/wiki/OpenID-Connect-Authentication
-$api = new SparkAPI_SparkAPI_Bearer("your_access_token_here"); 
+$api = new SparkAPI_Bearer("your_access_token_here");
 
 // identify your application (optional)
 $api->SetApplicationName("PHP-API-Code-Examples/1.0");
