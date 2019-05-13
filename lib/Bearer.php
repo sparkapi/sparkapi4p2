@@ -26,4 +26,8 @@ class SparkAPI_Bearer extends SparkAPI_Core implements SparkAPI_AuthInterface
     function is_auth_request($request) {
     	    return false;
     }
+
+    function ReAuthenticate() {
+        return true;
+    }
 }

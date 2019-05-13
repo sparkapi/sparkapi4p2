@@ -594,6 +594,26 @@ class SparkAPI_Core {
 		return $this->return_all_results($this->MakeAPICall("GET", "provided/savedsearches/" . $id, '30m'));
 	}
 
+	/*
+	 * Ticket services
+	 */
+	function GetPhotoTicket($id) {
+	    $args = [
+	        'data' => [
+                "Service" => "PhotoUploads",
+            ]
+        ];
+        return $this->return_first_result($this->MakeAPICall("POST", "listings/{$id}/photos/tickets", '0m', $args));
+    }
+
+    function GetDocumentTicket($id) {
+        $args = [
+            'data' => [
+                "Service" => "DocumentUploads",
+            ]
+        ];
+        return $this->return_first_result($this->MakeAPICall("POST", "listings/{$id}/documents/tickets", '0m', $args));
+    }
 
 
 	/*
