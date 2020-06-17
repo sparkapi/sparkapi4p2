@@ -1,21 +1,17 @@
 <?php
 
-header('Content-Type: text/html; charset=UTF-8');
-
-// include the SparkAPI core which autoloads other classes as necessary
-require_once("lib/Core.php");
-
+require_once ('vendor/autoload.php');
 
 /*
  * authenticate with the API
  * Changed in version 2.0
  *
- * There are two authentication methods that we fully support - OpenID Connect and Access Token Authentication. Additional,  
- * albeit deprecated, authentication examples are available on the wiki.  
+ * There are two authentication methods that we fully support - OpenID Connect and Access Token Authentication. Additional,
+ * albeit deprecated, authentication examples are available on the wiki.
  */
 
 // To utilize OpenID Connect Authentication see the wiki page here: https://github.com/sparkapi/sparkapi4p2/wiki/OpenID-Connect-Authentication
-$api = new SparkAPI_SparkAPI_Bearer("your_access_token_here"); 
+$api = new SparkAPI_Bearer("YOUR_BEARER_TOKEN");
 
 // identify your application (optional)
 $api->SetApplicationName("PHP-API-Code-Examples/1.0");
@@ -71,8 +67,6 @@ $api->SetApplicationName("PHP-API-Code-Examples/1.0");
  *
  */
 
-
-
 /*
  * request some basic account and system information
  */
@@ -92,17 +86,16 @@ $result = $api->GetMyAccount();
 // http://sparkplatform.com/docs/api_services/my_account
 print_r($result);
 
-
 /*
  * different requests for listings based on context
  */
 
 // Get all active listings, using the "get" method.
-$result = $api->get("listings", array(
-  "parameters" => array(
-    "_filter" => "MlsStatus Eq 'A'"
-  )
-));
+$result = $api->get("listings", [
+    "parameters" => [
+        "_filter" => "MlsStatus Eq 'A'"
+    ],
+]);
 
 $result = $api->GetMyListings();
 // http://sparkplatform.com/docs/api_services/listings
@@ -120,13 +113,13 @@ print_r($result);
  * request for listings with some parameters.  the above listing requests this argument and most of the options within
  */
 $result = $api->GetListings(
-	array(
-		'_pagination' => 1,
-		'_limit' => 3,
-		'_page' => 2,
-		'_filter' => "PropertyType Eq 'A'",
-		'_expand' => 'PrimaryPhoto'
-	)
+    [
+        '_pagination' => 1,
+        '_limit' => 3,
+        '_page' => 2,
+        '_filter' => "PropertyType Eq 'A'",
+        '_expand' => 'PrimaryPhoto'
+    ]
 );
 // http://sparkplatform.com/docs/api_services/listings
 print_r($result);
@@ -148,7 +141,6 @@ $result = $api->GetListingVideos($id);
 $result = $api->GetListingVirtualTours($id);
 // http://sparkplatform.com/docs/api_services/listings/virtual_tours
 
-
 /*
  * with a particular object Id known, you can request additional information about that one item
  */
@@ -158,7 +150,6 @@ $photo_id = "20080917142739989238000000";
 $result = $api->GetListingPhoto($id, $photo_id);
 // http://sparkplatform.com/docs/api_services/listings/photos
 
-
 /*
  * contact management
  * http://sparkplatform.com/docs/api_services/contacts
@@ -166,17 +157,16 @@ $result = $api->GetListingPhoto($id, $photo_id);
 
 $result = $api->GetContacts();
 
-$new_contact = array(
-	"DisplayName" => "Example Contact",
-	"PrimaryEmail" => "apiexample@sparkplatform.com",
-	"PrimaryPhoneNumber" => "888-123-4567",
-	"HomeStreetAddress" => "123 S. Main St",
-	"HomeLocality" => "Fargo",
-	"HomeRegion" => "ND",
-	"HomePostalCode" => "58104",
-	"Tag" => "Example Group"
-);
+$new_contact = [
+    "DisplayName" => "Example Contact",
+    "PrimaryEmail" => "apiexample@sparkplatform.com",
+    "PrimaryPhoneNumber" => "888-123-4567",
+    "HomeStreetAddress" => "123 S. Main St",
+    "HomeLocality" => "Fargo",
+    "HomeRegion" => "ND",
+    "HomePostalCode" => "58104",
+    "Tag" => "Example Group"
+];
 
 // $result = $api->AddContact($new_contact); // creates a new contact
-
 $result = $api->GetContact("20090816141725963238000000"); // get a contact by their Id

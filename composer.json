@@ -6,7 +6,7 @@
     "homepage": "http://github.com/sparkapi/sparkapi4p2",
     "license": "GPL-3.0",
     "require": {
-        "php": ">=5.2.0",
+        "php": ">=5.6.0",
         "jumbojett/openid-connect-php": "^0.3.0"
     },
     "autoload": {
