@@ -5,10 +5,6 @@ class SparkApi_CoreTest extends \PHPUnit\Framework\TestCase {
 
 	public function setUp() {
 		$this->core = new SparkAPI_Core();
-	}	
-
-	public function tearDown() {
-		/* ... */
 	}
 
 	public function testInstantiation() {
@@ -18,8 +14,7 @@ class SparkApi_CoreTest extends \PHPUnit\Framework\TestCase {
 	public function testMakeSendableBodyWrapsWithD() {
 		$body = array("ListingIds" => array("20100000000000000000000000",
 			                                "20100000000000000000000000"));
-		$this->assertEquals( json_encode(array("D"=>$body)), 
-			$this->core->make_sendable_body($body));
+		$this->assertEquals(json_encode(array("D"=>$body)), $this->core->make_sendable_body($body));
 	}
 
 	public function testParseCacheTime() {
@@ -38,7 +33,7 @@ class SparkApi_CoreTest extends \PHPUnit\Framework\TestCase {
 
 	public function testSetErrors() {
 		$this->core->SetErrors(null, "This is a random error");
-		$this->assertNull(null, $this->core->last_error_code);
+		$this->assertNull($this->core->last_error_code);
 		$this->assertEquals("This is a random error", $this->core->last_error_mess);
 
 		$this->core->SetErrors(1020, "Some message");

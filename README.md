@@ -12,11 +12,13 @@ For additional information on the PHP client, [visit the wiki](https://github.co
 
 For full information on the API, see http://sparkplatform.com/docs
 
+Installation
+-------------
+`composer require sparkapi/sparkapi:dev-master`
 
 Usage Examples 
 ------------------------
-    // include the Spark core which autoloads other classes as necessary
-    require_once("lib/Core.php");
+    require_once("vendor/autoload.php");
 
     // connect using Access Token Authentication (additional authentication methods available in the wiki)
     $api = new SparkAPI_Bearer("your_access_token_here");
@@ -24,15 +26,24 @@ Usage Examples
     // identify your application (optional)
     $api->SetApplicationName("MyPHPApplication/1.0");
 
-
     // get your listings
-    $result = $api->GetMyListings();
+    $results = $api->GetMyListings();
+    
+    foreach ($results as $result) {
+        // standard fields expected in the resource payload differ by MLS and role
+        echo $result['StandardFields']['ListingKey'];
+        // -or- 
+        print_r($result);
+    }
 
-	/*
-		Alternatively, if you cannot find the appropriate helper method,
-		try our "get", "post", "put", or "delete" methods from Core.php. 
-	*/
-	$result = $api->get("my/listings");
+    /*
+	 * Alternatively, if the appropriate helper method doesn't exist,
+	 * try our "get", "post", "put", or "delete" methods from Core.php
+	 * directly to the endpoint you want to use. 
+	 */
+	$result = $api->get("my/account");
+	
+	print_r($result);
 
     // see the included examples.php for more complete usage
 
