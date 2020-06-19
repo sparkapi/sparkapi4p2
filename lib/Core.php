@@ -34,7 +34,7 @@ class SparkAPI_Core {
 	const DEFAULT_PLATFORM_BASE = "sparkplatform.com";
 
   /* 
-    We'll no longer advertise a seperate domain for development,
+    We'll no longer advertise a separate domain for development,
     but will keep the logic around for backwards compat.
    */
 	const DEVELOPERS_API_BASE = "sparkapi.com";
@@ -51,7 +51,7 @@ class SparkAPI_Core {
 	protected $cache = null;
 	protected $cache_prefix = "SparkAPI_";
 
-	protected $headers = array();
+	protected $headers = [];
 
 	public $last_token = null;
 	protected $access_change_callback = null;
@@ -67,13 +67,11 @@ class SparkAPI_Core {
 
 	public $last_error_code = null;
 	public $last_error_mess = null;
-
-
+	
 	/*
 	 * Core functions
 	 */
-
-	function __construct() {
+	public function __construct() {
 		$this->SetHeader("Content-Type", "application/json");
 		$this->SetHeader('User-Agent', 'Spark API PHP Client/' . $this->api_client_version);
 	}
@@ -85,11 +83,11 @@ class SparkAPI_Core {
 		}
 	}
 
-	function SetApplicationName($name) {
+	public function SetApplicationName($name) {
 		$this->SetHeader('X-SparkApi-User-Agent', str_replace(array("\r", "\r\n", "\n"), '', trim($name)));
 	}
 
-	function SetDeveloperMode($enable = false) {
+	public function SetDeveloperMode($enable = false) {
 		$this->developer_mode = $enable;
 		if ($enable) {
 			$this->api_base = self::DEVELOPERS_API_BASE;
@@ -100,7 +98,7 @@ class SparkAPI_Core {
 		return $enable;
 	}
 
-	function SetTransport($transport) {
+	public function SetTransport($transport) {
 		if (is_object($transport)) {
 			$this->transport = $transport;
 		}
@@ -109,7 +107,7 @@ class SparkAPI_Core {
 		}
 	}
 
-	function SetCache($cache) {
+	public function SetCache($cache) {
 		if (is_object($cache)) {
 			$this->cache = $cache;
 		}
@@ -118,31 +116,31 @@ class SparkAPI_Core {
 		}
 	}
 
-	function SetCachePrefix($prefix) {
+	public function SetCachePrefix($prefix) {
 		$this->cache_prefix = $prefix;
 		return true;
 	}
 	
-	function SetHeader($key, $value) {
+	public function SetHeader($key, $value) {
 		$this->headers[$key] = $value;
 		return true;
 	}
 
-	function ClearHeader($key) {
+	public function ClearHeader($key) {
 		unset($this->headers[$key]);
 		return true;
 	}
 
-	function SetNewAccessCallback($func) {
+	public function SetNewAccessCallback($func) {
 		$this->access_change_callback = $func;
 		return true;
 	}
 
-	function make_sendable_body($data) {
+	public function make_sendable_body($data) {
 		return json_encode(array('D' => $data));
 	}
 
-	function parse_cache_time($val) {
+	public function parse_cache_time($val) {
 		$val = trim($val);
 
 		$tag = substr($val, -1);
@@ -168,10 +166,10 @@ class SparkAPI_Core {
 	}
 
 	// source: http://www.php.net/manual/en/function.utf8-encode.php#83777
-	function utf8_encode_mix($input, $encode_keys = false) {
+	public function utf8_encode_mix($input, $encode_keys = false) {
 
 		if (is_array($input)) {
-			$result = array();
+			$result = [];
 			foreach ($input as $k => $v) {
 				$key = ($encode_keys) ? utf8_encode($k) : $k;
 				$result[$key] = $this->utf8_encode_mix($v, $encode_keys);
@@ -188,12 +186,12 @@ class SparkAPI_Core {
 
 	}
 
-	function make_cache_key($request) {
+	public function make_cache_key($request) {
 		$string = $request['uri'] . '|' . serialize($request['headers']) . '|' . $request['cacheable_query_string'];
 		return $this->cache_prefix . md5($string);
 	}
 
-	function return_all_results($response) {
+	public function return_all_results($response) {
 		if ($response['success'] == true) {
 			return $response['results'];
 		}
@@ -202,7 +200,7 @@ class SparkAPI_Core {
 		}
 	}
 
-	function return_first_result($response) {
+	public function return_first_result($response) {
 		if ($response['success'] == true) {
 			if (count($response['results']) > 0) {
 				return $response['results'][0];
@@ -219,8 +217,7 @@ class SparkAPI_Core {
 	/*
 	 * API services
 	 */
-
-	function MakeAPICall($method, $service, $cache_time = 0, $params = array(), $post_data = null, $a_retry = false) {
+	public function MakeAPICall($method, $service, $cache_time = 0, $params = [], $post_data = null, $a_retry = false) {
 	
 		$this->ResetErrors();
 
@@ -262,8 +259,7 @@ class SparkAPI_Core {
 
 		$json = json_decode($response['body'], true);
 
-
-		$return = array();
+		$return = [];
 		$return['http_code'] = $response['http_code'];
 
 		if (!is_array($json)) {
@@ -317,7 +313,7 @@ class SparkAPI_Core {
           $return['results'] = $json['D']['Results'];
         }
         else {
-          $return['results'] = array();
+          $return['results'] = [];
         }
 			}
 			else {
@@ -362,115 +358,108 @@ class SparkAPI_Core {
 
 	}
 
-
-	function HasBasicRole() {
+	public function HasBasicRole() {
 		return false;
 	}
-
 
 	/*
 	 * Listing services
 	 */
-
-	function GetListings($params = array()) {
+	public function GetListings($params = []) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings", '10m', $params));
 	}
 
-	function GetListing($id, $params = array()) {
+	public function GetListing($id, $params = []) {
 		return $this->return_first_result($this->MakeAPICall("GET", "listings/" . $id, '10m', $params));
 	}
 
-	function GetMyListings($params = array()) {
+	public function GetMyListings($params = []) {
 		return $this->return_all_results($this->MakeAPICall("GET", "my/listings", '10m', $params));
 	}
 
-	function GetOfficeListings($params = array()) {
+	public function GetOfficeListings($params = []) {
 		return $this->return_all_results($this->MakeAPICall("GET", "office/listings", '10m', $params));
 	}
 
-	function GetCompanyListings($params = array()) {
+	public function GetCompanyListings($params = []) {
 		return $this->return_all_results($this->MakeAPICall("GET", "company/listings", '10m', $params));
 	}
 
-	function GetListingPhotos($id) {
+	public function GetListingPhotos($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/photos", '10m'));
 	}
 
-	function GetListingPhoto($id, $sid) {
+	public function GetListingPhoto($id, $sid) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/photos/" . $sid, '10m'));
 	}
 
-	function GetListingVideos($id) {
+	public function GetListingVideos($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/videos", '10m'));
 	}
 
-	function GetListingVideo($id, $sid) {
+	public function GetListingVideo($id, $sid) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/videos/" . $sid, '10m'));
 	}
 
-	function GetListingOpenHouses($id) {
+	public function GetListingOpenHouses($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/openhouses", '10m'));
 	}
 
-	function GetListingOpenHouse($id, $sid) {
+	public function GetListingOpenHouse($id, $sid) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/openhouses/" . $sid, '10m'));
 	}
 
-	function GetListingVirtualTours($id) {
+	public function GetListingVirtualTours($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/virtualtours", '10m'));
 	}
 
-	function GetListingVirtualTour($id, $sid) {
+	public function GetListingVirtualTour($id, $sid) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/virtualtours/" . $sid, '10m'));
 	}
 
-	function GetListingDocuments($id) {
+	public function GetListingDocuments($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/documents", '10m'));
 	}
 
-	function GetListingDocument($id, $sid) {
+	public function GetListingDocument($id, $sid) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/documents/" . $sid, '10m'));
 	}
 
-	function GetSharedListingNotes($id) {
+	public function GetSharedListingNotes($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/" . $id . "/shared/notes", '10m'));
 	}
 	
-	function GetListingsClustered($params = array()) {
+	public function GetListingsClustered($params = []) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listings/clusters", '10m', $params));
 	}
-
 
 	/*
 	 * Account services
 	 */
-
-	function GetAccounts($params = array()) {
+	public function GetAccounts($params = []) {
 		return $this->return_all_results($this->MakeAPICall("GET", "accounts", '1h', $params));
 	}
 
-	function GetAccount($id) {
+	public function GetAccount($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "accounts/" . $id, '1h'));
 	}
 
-	function GetAccountsByOffice($id, $params = array()) {
+	public function GetAccountsByOffice($id, $params = []) {
 		return $this->return_all_results($this->MakeAPICall("GET", "accounts/by/office/" . $id, '1h', $params));
 	}
 
-	function GetMyAccount($params = array()) {
+	public function GetMyAccount($params = []) {
 		return $this->return_first_result($this->MakeAPICall("GET", "my/account", '1h', $params));
 	}
 
-	function UpdateMyAccount($data) {
-		return $this->return_all_results($this->MakeAPICall("PUT", "my/account", '1h', array(), $this->make_sendable_body($data)));
+	public function UpdateMyAccount($data) {
+		return $this->return_all_results($this->MakeAPICall("PUT", "my/account", '1h', [], $this->make_sendable_body($data)));
 	}
-
 
 	/*
 	 * Contacts services
 	 */
-
-	function GetContacts($tags = null, $params = array()) {
+	public function GetContacts($tags = null, $params = []) {
 		if (!is_null($tags)) {
 			return $this->return_all_results($this->MakeAPICall("GET", "contacts/tags/" . rawurlencode($tags), 0, $params));
 		}
@@ -479,74 +468,71 @@ class SparkAPI_Core {
 		}
 	}
 
-	function AddContact($contact_data) {
+	public function AddContact($contact_data) {
 		$data = array('Contacts' => array($contact_data));
-		return $this->return_all_results($this->MakeAPICall("POST", "contacts", 0, array(), $this->make_sendable_body($data)));
+		return $this->return_all_results($this->MakeAPICall("POST", "contacts", 0, [], $this->make_sendable_body($data)));
 	}
 
-	function GetContact($id) {
+	public function GetContact($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "contacts/" . $id));
 	}
 
-	function MyContact() {
+	public function MyContact() {
 		return $this->return_first_result($this->MakeAPICall("GET", "my/contact"));
 	}
-
 
 	/*
 	 * Listing Carts services
 	 */
-
-	function GetListingCarts() {
+	public function GetListingCarts() {
 		return $this->return_all_results($this->MakeAPICall("GET", "listingcarts"));
 	}
 
-	function GetListingCartsWithListing($id) {
+	public function GetListingCartsWithListing($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listingcarts/for/" . $id));
 	}
 
-	function GetPortalListingCarts() {
+	public function GetPortalListingCarts() {
 		return $this->return_all_results($this->MakeAPICall("GET", "listingcarts/portal"));
 	}
 
-	function AddListingCart($name, $listings) {
+	public function AddListingCart($name, $listings) {
 		$data = array('ListingCarts' => array(array('Name' => $name, 'ListingIds' => $listings)));
-		return $this->return_all_results($this->MakeAPICall("POST", "listingcarts", 0, array(), $this->make_sendable_body($data)));
+		return $this->return_all_results($this->MakeAPICall("POST", "listingcarts", 0, [], $this->make_sendable_body($data)));
 	}
 
-	function GetListingCart($id) {
+	public function GetListingCart($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "listingcarts/" . $id));
 	}
 
-	function AddListingsToCart($id, $listings) {
+	public function AddListingsToCart($id, $listings) {
 		$data = array('ListingIds' => $listings);
-		return $this->return_all_results($this->MakeAPICall("POST", "listingcarts/" . $id, 0, array(), $this->make_sendable_body($data)));
+		return $this->return_all_results($this->MakeAPICall("POST", "listingcarts/" . $id, 0, [], $this->make_sendable_body($data)));
 	}
 
-	function UpdateListingsInCart($id, $listings) {
+	public function UpdateListingsInCart($id, $listings) {
 		$data = array('ListingIds' => $listings);
-		return $this->return_all_results($this->MakeAPICall("PUT", "listingcarts/" . $id, 0, array(), $this->make_sendable_body($data)));
+		return $this->return_all_results($this->MakeAPICall("PUT", "listingcarts/" . $id, 0, [], $this->make_sendable_body($data)));
 	}
 
-	function DeleteListingCart($id) {
+	public function DeleteListingCart($id) {
 		return $this->return_all_results($this->MakeAPICall("DELETE", "listingcarts/" . $id));
 	}
 
-	function DeleteListingsFromCart($id, $listings) {
+	public function DeleteListingsFromCart($id, $listings) {
 		return $this->return_all_results($this->MakeAPICall("DELETE", "listingcarts/" . $id . "/listings/" . $listings));
 	}
 	
-	function InitiateContactPortal($contact_id){
+	public function InitiateContactPortal($contact_id){
 		return $this->MakeAPICall("POST", "contacts/".$contact_id."/portal");
 	}
 
 	/*
 	 * Market Statistics services
 	 */
+	public function GetMarketStats($type, $options = "", $property_type = "", $location_name = "", $location_value = "") {
 
-	function GetMarketStats($type, $options = "", $property_type = "", $location_name = "", $location_value = "") {
-
-		$args = array();
+		$args = [];
 
 		if (!empty($options)) {
 			$args['Options'] = $options;
@@ -564,51 +550,45 @@ class SparkAPI_Core {
 		return $this->return_first_result($this->MakeAPICall("GET", "marketstatistics/" . $type, '48h', $args));
 	}
 
-
 	/*
 	 * Messaging services
 	 */
-
-	function AddMessage($data) {
+	public function AddMessage($data) {
 		$data = array('Messages' => array($data));
-		return $this->return_all_results($this->MakeAPICall("POST", "messages", 0, array(), $this->make_sendable_body($data)));
+		return $this->return_all_results($this->MakeAPICall("POST", "messages", 0, [], $this->make_sendable_body($data)));
 	}
 
 	/*
 	 * Saved Searches services
 	 */
-
-	function GetSavedSearches() {
+	public function GetSavedSearches() {
 		return $this->return_all_results($this->MakeAPICall("GET", "savedsearches", '30m'));
 	}
 
-	function GetSavedSearch($id) {
+	public function GetSavedSearch($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "savedsearches/" . $id, '30m'));
 	}
 	
-	function GetProvidedSavedSearches() {
+	public function GetProvidedSavedSearches() {
 		return $this->return_all_results($this->MakeAPICall("GET", "provided/savedsearches", '30m'));
 	}
 
-	function GetProvidedSavedSearch($id) {
+	public function GetProvidedSavedSearch($id) {
 		return $this->return_all_results($this->MakeAPICall("GET", "provided/savedsearches/" . $id, '30m'));
 	}
-
-
 
 	/*
 	 * IDX Links services
 	 */
-
-	function GetIDXLinks($params = array()) {
+	public function GetIDXLinks($params = []) {
 		return $this->return_all_results($this->MakeAPICall("GET", "idxlinks", '24h', $params));
 	}
 
-	function GetIDXLink($id) {
+	public function GetIDXLink($id) {
 		return $this->return_first_result($this->MakeAPICall("GET", "idxlinks/" . $id, '24h'));
 	}
 
-	function GetTransformedIDXLink($link, $args = array()) {
+	public function GetTransformedIDXLink($link, $args = []) {
 		$response = $this->return_first_result($this->MakeAPICall("GET", "redirect/idxlink/" . $link, '30m', $args));
 
 		if ($response != null) {
@@ -622,11 +602,10 @@ class SparkAPI_Core {
 	/*
 	 * Preferences services
 	 */
-
-	function GetPreferences() {
+	public function GetPreferences() {
 		$response = $this->return_all_results($this->MakeAPICall("GET", "connect/prefs", '24h'));
 
-		$records = array();
+		$records = [];
 		foreach ($response as $pref) {
 			$records[$pref['Name']] = $pref['Value'];
 		}
@@ -638,12 +617,11 @@ class SparkAPI_Core {
 	/*
 	 * Property Types services
 	 */
-
-	function GetPropertyTypes() {
+	public function GetPropertyTypes() {
 		$response = $this->MakeAPICall("GET", "propertytypes", '24h');
 
 		if ($response['success'] == true) {
-			$records = array();
+			$records = [];
 			foreach ($response['results'] as $res) {
 				$records[$res['MlsCode']] = $res['MlsName'];
 			}
@@ -655,16 +633,14 @@ class SparkAPI_Core {
 		}
 	}
 
-
 	/*
 	 * Standard Fields services
 	 */
-
-	function GetStandardFields() {
+	public function GetStandardFields() {
 		return $this->return_all_results($this->MakeAPICall("GET", "standardfields", '24h'));
 	}
 
-	function GetStandardFieldList($field) {
+	public function GetStandardFieldList($field) {
 		$data = $this->return_first_result($this->MakeAPICall("GET", "standardfields/" . $field, '24h'));
 		if ($data) {
 			return $data[$field]['FieldList'];
@@ -678,44 +654,41 @@ class SparkAPI_Core {
 	/*
 	 * Custom Fields services
 	 */
-
-	function GetCustomFields() {
+	public function GetCustomFields() {
 		return $this->return_all_results($this->MakeAPICall("GET", "customfields", '24h'));
 	}
 
-	function GetCustomFieldList($field) {
+	public function GetCustomFieldList($field) {
 		$data = $this->return_first_result($this->MakeAPICall("GET", "customfields/" . rawurlencode($field), '24h'));
 		if ($data && array_key_exists('FieldList', $data[$field]) ) {
 			return $data[$field]['FieldList'];
 		}
 		else {
-			return array();
+			return [];
 		}
 	}
 
 	/*
 	 * System Info services
 	 */
-
-	function GetSystemInfo() {
+	public function GetSystemInfo() {
 		return $this->return_first_result($this->MakeAPICall("GET", "system", '24h'));
 	}
 	
 	/*
 	 * Error services
 	 */
-	 
-	function SetErrors($code, $message) {
+	public function SetErrors($code, $message) {
 		$this->last_error_code = $code;
 		$this->last_error_mess = $message;
 	}
 
-	function ResetErrors() {
+	public function ResetErrors() {
 		$this->last_error_code = false;
 		$this->last_error_mess = false;
 	}
 
-	function GetErrors() {
+	public function GetErrors() {
 		if ($this->last_error_code || $this->last_error_mess){
 			return $this->last_error_code.' - '.$this->last_error_mess;
 		} else {
@@ -723,7 +696,7 @@ class SparkAPI_Core {
 		}
 	}	
 	
-	function Log($message) {
+	public function Log($message) {
 		if (ini_get('log_errors') == true && $message){
 			error_log("Spark Api Client/" . $this->api_client_version . ' - ' . $message, 0);
 			
@@ -732,8 +705,6 @@ class SparkAPI_Core {
 			return false;
 		}
 	}
-	
-	
 
 	/**
 	 * Performs a GET request to Spark API.  Wraps MakeAPIRequest.
@@ -747,7 +718,7 @@ class SparkAPI_Core {
 	 *                    'results' => An array of the "Results" attribute
 	 *               If success is false, consult $this->GetErrors().
 	 */
-	function get($service, $options = array()) {
+	public function get($service, $options = []) {
 		return $this->wrapped_api_call('GET', $service, $options);
 	}
 
@@ -766,7 +737,7 @@ class SparkAPI_Core {
 	 *                    'results' => An array of the "Results" attribute
 	 *               If success is false, consult $this->GetErrors().
 	 */
-	function post($service, $options = array()) {
+	public function post($service, $options = []) {
 		return $this->wrapped_api_call('POST', $service, $options);
 	}
 
@@ -785,7 +756,7 @@ class SparkAPI_Core {
 	 *                    'results' => An array of the "Results" attribute
 	 *               If success is false, consult $this->GetErrors().
 	 */
-	function put($service, $options = array()) {
+	public function put($service, $options = []) {
 		return $this->wrapped_api_call('PUT', $service, $options);
 	}
 
@@ -801,51 +772,11 @@ class SparkAPI_Core {
 	 *                    'results' => An array of the "Results" attribute
 	 *               If success is false, consult $this->GetErrors().
 	 */
-	function delete($service, $options = array()) {
+	public function delete($service, $options = []) {
 		return $this->wrapped_api_call('DELETE', $service, $options);
 	}
 
-	function GetSparkBarToken($access_token) {
-
-		$this->ResetErrors();
-
-		if ($this->transport == null) {
-			$this->SetTransport(new SparkAPI_CurlTransport);
-		}
-
-		$spark_bar_headers = $this->headers;
-		unset($spark_bar_headers["Content-Type"]);
-
-		$request = array(
-			'protocol' => 'https',
-			'method' => 'POST',
-			'uri' => '/appbar/authorize',
-			'host' => $this->platform_base,
-			'headers' => $spark_bar_headers,
-			'post_data' => array("access_token" => $access_token)
-		);
-
-		$response = $this->transport->make_request($request);
-		$json = json_decode($response['body'], true);
-
-		if (!is_array($json)) {
-			return $this->SetErrors(null, "An unknown error occurred when retrieving your sparkbar token.");
-		}
-
-		$token = null;
-		if (array_key_exists('success', $json)) {
-			if ($json['success'] == True) {
-				$token = $json["token"];
-			}
-			else {
-				return $this->SetErrors(null, $json['error']);
-			}
-		}
-
-		return $token;
-	}
-
-	protected function extract_from_request_options($key, $options=array(), $default) {
+	protected function extract_from_request_options($key, $options = [], $default) {
 		if (array_key_exists($key, $options)) {
 			return $options[$key];
 		}
@@ -856,7 +787,7 @@ class SparkAPI_Core {
 
 	protected function wrapped_api_call($method, $service, $options) {
 		$cache_time = $this->extract_from_request_options('cache_time', $options, 0);
-		$params     = $this->extract_from_request_options('parameters', $options, array());
+		$params     = $this->extract_from_request_options('parameters', $options, []);
 		$post_data  = $this->extract_from_request_options('data',       $options, null);
 		$a_retry    = $this->extract_from_request_options('retry',      $options, false);
 
