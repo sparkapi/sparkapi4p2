@@ -845,7 +845,7 @@ class SparkAPI_Core {
 		return $token;
 	}
 
-	protected function extract_from_request_options($key, $options=array(), $default) {
+	protected function extract_from_request_options($key, $options=array(), $default=null) {
 		if (array_key_exists($key, $options)) {
 			return $options[$key];
 		}
