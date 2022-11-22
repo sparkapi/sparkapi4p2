@@ -12,6 +12,7 @@ class SparkAPI_CurlTransport extends SparkAPI_CoreTransport implements SparkAPI_
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->ch, CURLOPT_ENCODING, "gzip");
+		curl_setopt($this->ch, CURLOPT_SSLVERSION, 6);
 	}
 	
 	function __destruct() {
