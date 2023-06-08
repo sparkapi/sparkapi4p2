@@ -40,6 +40,27 @@ class SparkAPI_OIDCAuth extends SparkAPI_Core implements SparkAPI_AuthInterface
         }
     }
 
+    function ReAuthenticate() {
+		if ( !empty($this->refresh_token) ) {
+            $oidc = new OpenIDConnectClient(SparkAPI_OIDCAuth::SPARK_PROVIDER,
+                $this->oauth_key,
+                $this->oauth_secret
+            );
+
+            try {
+                $oidc->refreshToken($this->refresh_token);
+                $this->SetAccessToken($oidc->getAccessToken());
+                $this->SetRefreshToken($oidc->getRefreshToken());
+
+                return true;
+            } catch (OpenIDConnectClientException $e) {
+                throw new \Exception($e->getMessage(), $e->getCode());
+            }
+    
+		}
+		return false;
+	}
+
     function sign_request($request) {
         $this->SetHeader('Authorization', 'Bearer '. $this->last_token);
 
@@ -73,4 +94,9 @@ class SparkAPI_OIDCAuth extends SparkAPI_Core implements SparkAPI_AuthInterface
     {
         $this->force_https = true;
     }
+
+	function is_auth_request($request) {
+		return ($request['uri'] == '/'. $this->api_version .'/openid/token') ? true : false;
+    }
+
 }
